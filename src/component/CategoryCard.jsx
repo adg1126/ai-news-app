@@ -40,9 +40,7 @@ export default function CategoryCard({
       <CardContent>
         <Grid container direction='column' spacing={6}>
           <Grid item>
-            <Typography variant='h5' component='h2'>
-              {title}
-            </Typography>
+            <Typography variant='h5'>{title}</Typography>
           </Grid>
           <Grid item>
             <>

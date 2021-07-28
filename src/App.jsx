@@ -27,34 +27,36 @@ class App extends React.Component {
 
     this.alanBtnInstance = alanBtn({
       key: ALAN_API_KEY,
-      onCommand: ({
-        command,
-        articles,
-        number,
-        route: { reqParams, term }
-      }) => {
-        if (command === 'newHeadlines') {
-          setArticles(articles);
+      onCommand: ({ command, articles, number, route }) => {
+        switch (command) {
+          case 'newHeadlines':
+            const { reqParams, term } = route;
+            setArticles(articles);
 
-          reqParams === 'latest-news'
-            ? history.push(reqParams)
-            : history.push(
-                `${reqParams}/${term.replace(/\s+/g, '-').toLowerCase()}`
-              );
-        } else if (command === 'highlight') {
-          setActiveArticle(prevArticle => prevArticle + 1);
-        } else if (command === 'open') {
-          const parsedNum =
-            number.length > 2
-              ? wordsToNumbers(number, { fuzzy: true })
-              : number;
+            reqParams === 'latest-news'
+              ? history.push(reqParams)
+              : history.push(
+                  `${reqParams}/${term.replace(/\s+/g, '-').toLowerCase()}`
+                );
+            break;
+          case 'highlight':
+            setActiveArticle(prevArticle => prevArticle);
+            break;
+          case 'open':
+            const parsedNum =
+              number.length > 2
+                ? wordsToNumbers(number, { fuzzy: true })
+                : number;
 
-          if (parsedNum > 20) {
-            alanBtn().playText('Please try that again.');
-          } else {
-            window.open(articles[parsedNum].url, '_black');
-            alanBtn().playText('Openning...');
-          }
+            if (parsedNum > 20) {
+              alanBtn().playText('Please try that again.');
+            } else {
+              window.open(articles[parsedNum].url, '_black');
+              alanBtn().playText('Openning...');
+            }
+            break;
+          default:
+            history.push('/');
         }
       }
     });
